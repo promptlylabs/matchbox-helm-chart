@@ -1,0 +1,45 @@
+apiVersion: v2
+name: matchbox
+description: A Helm chart for deploying Matchbox - a FHIR server for validation and mapping
+type: application
+version: 0.1.0
+appVersion: "v4.0.18"
+kubeVersion: ">=1.19.0-0"
+
+home: https://matchbox.health
+sources:
+  - https://github.com/ahdis/matchbox
+  - https://github.com/promptlylabs/matchbox-helm-chart
+
+keywords:
+  - fhir
+  - hl7
+  - healthcare
+  - interoperability
+  - validation
+  - mapping
+  - hapi
+  - matchbox
+
+maintainers:
+  - name: promptlylabs
+    url: https://github.com/promptlylabs
+
+annotations:
+  artifacthub.io/category: integration-delivery
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/links: |
+    - name: Matchbox Website
+      url: https://matchbox.health
+    - name: Matchbox Documentation
+      url: https://ahdis.github.io/matchbox/
+    - name: Matchbox Source
+      url: https://github.com/ahdis/matchbox
+    - name: support
+      url: https://github.com/promptlylabs/matchbox-helm-chart/issues
+  artifacthub.io/images: |
+    - name: matchbox
+      image: europe-west6-docker.pkg.dev/ahdis-ch/ahdis/matchbox:v4.0.18
+  artifacthub.io/changes: |
+    - kind: added
+      description: Initial chart release
