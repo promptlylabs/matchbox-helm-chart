@@ -42,7 +42,7 @@ annotations:
     - name: matchbox
       image: europe-west6-docker.pkg.dev/ahdis-ch/ahdis/matchbox:v4.0.18
   artifacthub.io/signKey: |
-    fingerprint: <GPG_FINGERPRINT>
+    fingerprint: 91BB0B66D1ACFC4F1334EFF88DBCB7A6A6A4969F
     url: https://promptlylabs.github.io/matchbox-helm-chart/pubkey.asc
   artifacthub.io/changes: |
     - kind: added
