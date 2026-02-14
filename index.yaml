@@ -5,6 +5,60 @@ entries:
       artifacthub.io/category: integration-delivery
       artifacthub.io/changes: |
         - kind: added
+          description: Add values.schema.json for schema validation
+        - kind: added
+          description: Add GPG chart signing
+        - kind: added
+          description: Add chart icon
+      artifacthub.io/images: |
+        - name: matchbox
+          image: europe-west6-docker.pkg.dev/ahdis-ch/ahdis/matchbox:v4.0.18
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Matchbox Website
+          url: https://matchbox.health
+        - name: Matchbox Documentation
+          url: https://ahdis.github.io/matchbox/
+        - name: Matchbox Source
+          url: https://github.com/ahdis/matchbox
+        - name: support
+          url: https://github.com/promptlylabs/matchbox-helm-chart/issues
+      artifacthub.io/signKey: |
+        fingerprint: 91BB0B66D1ACFC4F1334EFF88DBCB7A6A6A4969F
+        url: https://promptlylabs.github.io/matchbox-helm-chart/pubkey.asc
+    apiVersion: v2
+    appVersion: v4.0.18
+    created: "2026-02-14T12:19:27.362489393Z"
+    description: A Helm chart for deploying Matchbox - a FHIR server for validation
+      and mapping
+    digest: 3a75bbb15d78462838dc3a7c45f561697d232770f58ceda342a86662263dd1b7
+    home: https://matchbox.health
+    icon: https://promptlylabs.github.io/matchbox-helm-chart/matchbox.png
+    keywords:
+    - fhir
+    - hl7
+    - healthcare
+    - interoperability
+    - validation
+    - mapping
+    - hapi
+    - matchbox
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: promptlylabs
+      url: https://github.com/promptlylabs
+    name: matchbox
+    sources:
+    - https://github.com/ahdis/matchbox
+    - https://github.com/promptlylabs/matchbox-helm-chart
+    type: application
+    urls:
+    - https://github.com/promptlylabs/matchbox-helm-chart/releases/download/matchbox-0.2.0/matchbox-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/changes: |
+        - kind: added
           description: Initial chart release
       artifacthub.io/images: |
         - name: matchbox
@@ -47,4 +101,4 @@ entries:
     urls:
     - https://github.com/promptlylabs/matchbox-helm-chart/releases/download/matchbox-0.1.0/matchbox-0.1.0.tgz
     version: 0.1.0
-generated: "2026-02-14T07:45:31.530212Z"
+generated: "2026-02-14T12:19:27.362500904Z"
