@@ -5,7 +5,7 @@
 # repositoryID below with the UUID assigned by Artifact Hub to
 # achieve "Verified Publisher" status.
 #
-# repositoryID: <fill-after-registering-on-artifacthub>
+repositoryID: 71106623-805d-456e-bb27-c0721ae448a4
 owners:
   - name: Dani
     email: andre.gomes@promptlyhealth.com
