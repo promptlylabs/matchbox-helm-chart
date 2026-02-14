@@ -2,11 +2,12 @@ apiVersion: v2
 name: matchbox
 description: A Helm chart for deploying Matchbox - a FHIR server for validation and mapping
 type: application
-version: 0.1.0
+version: 0.2.0
 appVersion: "v4.0.18"
 kubeVersion: ">=1.19.0-0"
 
 home: https://matchbox.health
+icon: https://promptlylabs.github.io/matchbox-helm-chart/matchbox.png
 sources:
   - https://github.com/ahdis/matchbox
   - https://github.com/promptlylabs/matchbox-helm-chart
@@ -40,6 +41,13 @@ annotations:
   artifacthub.io/images: |
     - name: matchbox
       image: europe-west6-docker.pkg.dev/ahdis-ch/ahdis/matchbox:v4.0.18
+  artifacthub.io/signKey: |
+    fingerprint: <GPG_FINGERPRINT>
+    url: https://promptlylabs.github.io/matchbox-helm-chart/pubkey.asc
   artifacthub.io/changes: |
     - kind: added
-      description: Initial chart release
+      description: Add values.schema.json for schema validation
+    - kind: added
+      description: Add GPG chart signing
+    - kind: added
+      description: Add chart icon
