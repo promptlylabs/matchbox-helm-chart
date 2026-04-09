@@ -2,7 +2,7 @@ apiVersion: v2
 name: matchbox
 description: A Helm chart for deploying Matchbox - a FHIR server for validation and mapping
 type: application
-version: 0.2.0
+version: 0.2.1
 appVersion: "v4.0.18"
 kubeVersion: ">=1.19.0-0"
 
