@@ -78,10 +78,10 @@ startupProbe:
   httpGet:
     path: /v4/actuator/health/liveness
     port: http
-  initialDelaySeconds: 15
+  initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
-  failureThreshold: 6
+  failureThreshold: 10
 
 livenessProbe:
   httpGet:
