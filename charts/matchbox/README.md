@@ -102,6 +102,40 @@ The following table lists the main configurable parameters of the Matchbox chart
 | `secretNames`       | Names of additional secrets with env vars                               | `[]`                                                  |
 | `matchbox`          | Matchbox-specific configuration (see https://ahdis.github.io/matchbox/) | See values.yaml                                       |
 
+### Bundled IG packages
+
+The chart can ship FHIR Implementation Guide `.tgz` files inside the release and load them from disk at pod start, instead of (or alongside) pulling them from a public package registry. This is useful for internal / unpublished IGs, for pre-release versions not on a registry, and for pinning the exact bytes of an IG to the chart release.
+
+To bundle a package:
+
+1. Drop the `.tgz` under `charts/matchbox/files/packages/`.
+2. List it under the top-level `packages:` key.
+3. Reference it from `matchbox.hapi.fhir.implementation-guides` with a `url: file:/packages/<file>` entry.
+
+Example:
+
+```yaml
+packages:
+  - file: my-internal-ig-1.2.0.tgz
+
+matchbox:
+  hapi:
+    fhir:
+      implementation-guides:
+        my_internal_ig:
+          name: my.internal.ig
+          version: 1.2.0
+          url: file:/packages/my-internal-ig-1.2.0.tgz
+```
+
+Mechanics: the chart renders one `<release>-packages` ConfigMap containing every listed file as `binaryData`, mounts it read-only at `/packages/` on the matchbox container, and adds a `checksum/packages` pod annotation so changing a `.tgz` rolls the pods.
+
+**Size limit.** ConfigMaps have a ~1 MiB hard limit per object (etcd). All listed files share one ConfigMap, so the sum of base64-encoded sizes must fit under that ceiling. In practice that means each file should be under ~900 KiB raw. Large IGs (e.g. `hl7.fhir.r4.core` at ~5 MB) cannot be bundled this way and should continue to load from the public package registry.
+
+**Trust boundary.** With `url: file:/packages/...` matchbox loads the bytes you shipped in the chart, bypassing the package registry entirely. Version-pinning via the registry no longer applies — the operator owns the bytes.
+
+This chart ships with `fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz` bundled and loaded by default. Override `packages` and `matchbox.hapi.fhir.implementation-guides` in your values to change that.
+
 ### Database Configuration
 
 Matchbox can use a PostgreSQL database for persistence.

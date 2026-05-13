@@ -2,7 +2,7 @@ apiVersion: v2
 name: matchbox
 description: A Helm chart for deploying Matchbox - a FHIR server for validation and mapping
 type: application
-version: 0.2.0
+version: 0.3.0
 appVersion: "v4.0.18"
 kubeVersion: ">=1.19.0-0"
 
@@ -46,8 +46,6 @@ annotations:
     url: https://promptlylabs.github.io/matchbox-helm-chart/pubkey.asc
   artifacthub.io/changes: |
     - kind: added
-      description: Add values.schema.json for schema validation
+      description: Support bundled FHIR IG packages via new packages[] values key
     - kind: added
-      description: Add GPG chart signing
-    - kind: added
-      description: Add chart icon
+      description: Bundle fhir.r4.wales.proms.lpds 1.0.0-rc5 as a default-loaded IG

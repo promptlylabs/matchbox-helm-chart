@@ -1,0 +1,17 @@
+{{- if .Values.packages }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "matchbox.fullname" . }}-packages
+  labels:
+    {{- include "matchbox.labels" . | nindent 4 }}
+binaryData:
+{{- range .Values.packages }}
+  {{- $path := printf "files/packages/%s" .file }}
+  {{- $contents := $.Files.Get $path }}
+  {{- if not $contents }}
+  {{- fail (printf "packages: file %q not found at charts/matchbox/%s" .file $path) }}
+  {{- end }}
+  {{ .file }}: {{ $contents | b64enc }}
+{{- end }}
+{{- end }}

@@ -19,6 +19,9 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.packages }}
+        checksum/packages: {{ include (print $.Template.BasePath "/configmap-packages.yaml") . | sha256sum }}
+        {{- end }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -68,6 +71,11 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
+            {{- if .Values.packages }}
+            - name: packages
+              mountPath: /packages
+              readOnly: true
+            {{- end }}
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -75,6 +83,11 @@ spec:
         - name: config
           configMap:
             name: {{ include "matchbox.fullname" . }}-config
+        {{- if .Values.packages }}
+        - name: packages
+          configMap:
+            name: {{ include "matchbox.fullname" . }}-packages
+        {{- end }}
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

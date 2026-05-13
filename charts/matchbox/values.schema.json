@@ -291,6 +291,21 @@
                 "type": "string"
             }
         },
+        "packages": {
+            "type": "array",
+            "description": "Bundled FHIR IG packages shipped with the chart from files/packages/. Each file is rendered into a ConfigMap and mounted at /packages/<file> inside the container.",
+            "items": {
+                "type": "object",
+                "required": ["file"],
+                "additionalProperties": false,
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "description": "Filename under charts/matchbox/files/packages/. Used as the key in the ConfigMap and the basename of the mounted path /packages/<file>."
+                    }
+                }
+            }
+        },
         "matchbox": {
             "type": "object",
             "description": "Matchbox application configuration (rendered as Spring Boot application.yaml). Supports arbitrary Spring Boot, HAPI FHIR, and matchbox configuration properties.",
