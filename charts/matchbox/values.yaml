@@ -164,7 +164,7 @@ secretNames: []
 # Note: each file must be <~900 KiB so the resulting ConfigMap stays under the
 # 1 MiB etcd object limit.
 packages: []
-#   - file: fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz
+#   - file: my-internal-ig-1.2.0.tgz
 
 # Matchbox specific configuration
 matchbox:
@@ -199,7 +199,7 @@ matchbox:
   #       hl7_fhir_r4_core:
   #         name: hl7.fhir.r4.core
   #         version: 4.0.1
-  #       fhir_r4_wales_proms_lpds:
-  #         name: fhir.r4.wales.proms.lpds
-  #         version: 1.0.0-rc5
-  #         url: file:/packages/fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz
+  #       my_internal_ig:
+  #         name: my.internal.ig
+  #         version: 1.2.0
+  #         url: file:/packages/my-internal-ig-1.2.0.tgz
