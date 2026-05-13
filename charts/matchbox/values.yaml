@@ -163,8 +163,8 @@ secretNames: []
 # block via the `url:` field — see README for the full example.
 # Note: each file must be <~900 KiB so the resulting ConfigMap stays under the
 # 1 MiB etcd object limit.
-packages:
-  - file: fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz
+packages: []
+#   - file: fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz
 
 # Matchbox specific configuration
 matchbox:
@@ -190,17 +190,16 @@ matchbox:
   #       hibernate:
   #         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-  hapi:
-    fhir:
-      implementation-guides:
-        fhir_r4_wales_proms_lpds:
-          name: fhir.r4.wales.proms.lpds
-          version: 1.0.0-rc5
-          url: file:/packages/fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz
-        # Example: load additional IGs from the public package registry
-        # hl7_fhir_r4_core:
-        #   name: hl7.fhir.r4.core
-        #   version: 4.0.1
-        # fhir_r4_wales_psom:
-        #   name: fhir.r4.wales.psom
-        #   version: 1.0.0-rc3
+  # Example: FHIR Implementation Guides to preload.
+  # Use `url:` with a `file:` scheme to load a bundled package (see `packages` above),
+  # or omit `url:` to fetch from the public package registry by name+version.
+  # hapi:
+  #   fhir:
+  #     implementation-guides:
+  #       hl7_fhir_r4_core:
+  #         name: hl7.fhir.r4.core
+  #         version: 4.0.1
+  #       fhir_r4_wales_proms_lpds:
+  #         name: fhir.r4.wales.proms.lpds
+  #         version: 1.0.0-rc5
+  #         url: file:/packages/fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz

@@ -134,7 +134,7 @@ Mechanics: the chart renders one `<release>-packages` ConfigMap containing every
 
 **Trust boundary.** With `url: file:/packages/...` matchbox loads the bytes you shipped in the chart, bypassing the package registry entirely. Version-pinning via the registry no longer applies — the operator owns the bytes.
 
-This chart ships with `fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz` bundled and loaded by default. Override `packages` and `matchbox.hapi.fhir.implementation-guides` in your values to change that.
+This chart ships the file `fhir.r4.wales.proms.lpds-1.0.0-rc5.tgz` under `charts/matchbox/files/packages/` for consumers that want to load it. It is **not** loaded by default — opt in by listing it under `packages:` and adding a matching `implementation-guides` entry in your values.
 
 ### Database Configuration
 

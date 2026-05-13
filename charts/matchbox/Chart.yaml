@@ -48,4 +48,4 @@ annotations:
     - kind: added
       description: Support bundled FHIR IG packages via new packages[] values key
     - kind: added
-      description: Bundle fhir.r4.wales.proms.lpds 1.0.0-rc5 as a default-loaded IG
+      description: Ship fhir.r4.wales.proms.lpds 1.0.0-rc5 under files/packages/ for opt-in use
