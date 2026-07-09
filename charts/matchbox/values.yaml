@@ -108,14 +108,14 @@ ingress: {}
 #     hosts:
 #       - matchbox.example.com
 
-resources: {}
-  # Recommended for production/staging with IG loading:
-  # limits:
-  #   cpu: 2000m
-  #   memory: 4Gi
-  # requests:
-  #   cpu: 1000m
-  #   memory: 2500Mi
+# Sane defaults for a small IG set; raise for production/heavy IG loading.
+# No CPU limit by convention (avoids throttling); memory is always limited.
+resources:
+  requests:
+    cpu: 100m
+    memory: 1536Mi
+  limits:
+    memory: 2560Mi
 
 startupProbe:
   httpGet:
