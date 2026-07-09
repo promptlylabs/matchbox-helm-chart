@@ -30,16 +30,24 @@ podAnnotations:
 
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
 
 securityContext:
-  # Spring Boot/HAPI FHIR requires write access for temp files, caching, and Hibernate
-  # TODO: Investigate using emptyDir volumes for /tmp to enable readOnlyRootFilesystem: true
+  # readOnlyRootFilesystem is intentionally false: matchbox needs a writable
+  # FHIR package cache (~/.fhir/packages), Tomcat work dir, and Hibernate temp.
+  # A read-only root requires relocating the package cache (HOME) and is fragile
+  # across restarts — verified on a kind cluster: FilesystemPackageCacheManager
+  # throws an NPE when the cache dir isn't writable / is left in a partial state.
   readOnlyRootFilesystem: false
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
   allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
   capabilities:
     drop:
       - ALL
@@ -62,7 +70,14 @@ jmxExporter:
   port: 5556
   # JMX RMI port opened on the app JVM for the sidecar to read (loopback only).
   jmxPort: 9010
-  resources: {}
+  # Modest defaults so an enabled sidecar always has requests/limits set.
+  # No CPU limit by convention (avoids throttling).
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
   # jmx_exporter config — rules/whitelist ONLY. Do NOT set hostPort here;
   # the chart injects it from jmxPort.
   config: {}
