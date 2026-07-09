@@ -91,7 +91,7 @@ The following table lists the main configurable parameters of the Matchbox chart
 |---------------------|-------------------------------------------------------------------------|-------------------------------------------------------|
 | `replicaCount`      | Number of replicas                                                      | `1`                                                   |
 | `image.repository`  | Matchbox image repository                                               | `europe-west6-docker.pkg.dev/ahdis-ch/ahdis/matchbox` |
-| `image.tag`         | Matchbox image tag                                                      | `v4.0.18` (chart appVersion)                          |
+| `image.tag`         | Matchbox image tag                                                      | `v4.1.11` (chart appVersion)                          |
 | `image.pullPolicy`  | Image pull policy                                                       | `Always`                                              |
 | `service.type`      | Kubernetes service type                                                 | `ClusterIP`                                           |
 | `service.port`      | Service port                                                            | `8080`                                                |
@@ -101,6 +101,17 @@ The following table lists the main configurable parameters of the Matchbox chart
 | `resources`         | CPU/Memory resource requests/limits                                     | `{}`                                                  |
 | `secretNames`       | Names of additional secrets with env vars                               | `[]`                                                  |
 | `matchbox`          | Matchbox-specific configuration (see https://ahdis.github.io/matchbox/) | See values.yaml                                       |
+| `jmxExporter.enabled` | Run a Prometheus JMX exporter sidecar (standalone mode over loopback RMI) | `false`                                           |
+| `jmxExporter.image.repository` | JMX exporter image                                           | `dhi.io/jmx-exporter`                                 |
+| `jmxExporter.image.tag` | JMX exporter image tag                                              | `"1"`                                                 |
+| `jmxExporter.port`  | HTTP port the exporter serves `/metrics` on                             | `5556`                                                |
+| `jmxExporter.jmxPort` | JMX RMI port opened on the app JVM (loopback only)                    | `9010`                                                |
+| `jmxExporter.resources` | Sidecar resource requests/limits                                    | `{}`                                                  |
+| `jmxExporter.config` | jmx_exporter scrape rules/whitelist (chart injects `hostPort`)         | `{}`                                                  |
+| `serviceMonitor.enabled` | Create a Prometheus Operator ServiceMonitor for the metrics port   | `false`                                               |
+| `serviceMonitor.interval` | Scrape interval                                                   | `30s`                                                 |
+| `serviceMonitor.path` | Metrics path                                                          | `/metrics`                                            |
+| `serviceMonitor.labels` | Extra labels on the ServiceMonitor                                  | `{}`                                                  |
 
 ### Database Configuration
 

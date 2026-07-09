@@ -30,16 +30,24 @@ podAnnotations:
 
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
 
 securityContext:
-  # Spring Boot/HAPI FHIR requires write access for temp files, caching, and Hibernate
-  # TODO: Investigate using emptyDir volumes for /tmp to enable readOnlyRootFilesystem: true
+  # readOnlyRootFilesystem is intentionally false: matchbox needs a writable
+  # FHIR package cache (~/.fhir/packages), Tomcat work dir, and Hibernate temp.
+  # A read-only root requires relocating the package cache (HOME) and is fragile
+  # across restarts — verified on a kind cluster: FilesystemPackageCacheManager
+  # throws an NPE when the cache dir isn't writable / is left in a partial state.
   readOnlyRootFilesystem: false
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
   allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
   capabilities:
     drop:
       - ALL
@@ -47,6 +55,41 @@ securityContext:
 service:
   type: ClusterIP
   port: 8080
+
+# Prometheus JMX exporter sidecar (standalone mode over loopback RMI).
+# When enabled the chart also: opens JMX RMI on jmxPort (via JDK_JAVA_OPTIONS),
+# renders a config ConfigMap, and adds a "metrics" port to the Service.
+jmxExporter:
+  enabled: false
+  image:
+    # Docker Hardened Image (free Community tier), multi-arch, standalone mode.
+    repository: dhi.io/jmx-exporter
+    tag: "1"
+    pullPolicy: IfNotPresent
+  # HTTP port the exporter serves /metrics on.
+  port: 5556
+  # JMX RMI port opened on the app JVM for the sidecar to read (loopback only).
+  jmxPort: 9010
+  # Modest defaults so an enabled sidecar always has requests/limits set.
+  # No CPU limit by convention (avoids throttling).
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+  # jmx_exporter config — rules/whitelist ONLY. Do NOT set hostPort here;
+  # the chart injects it from jmxPort.
+  config: {}
+
+# ServiceMonitor for the metrics port (requires the prometheus-operator CRDs).
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  path: /metrics
+  # Extra labels (e.g. to match a Prometheus release selector).
+  labels: {}
 
 ingress: {}
 # Example ingress configuration:
@@ -65,14 +108,14 @@ ingress: {}
 #     hosts:
 #       - matchbox.example.com
 
-resources: {}
-  # Recommended for production/staging with IG loading:
-  # limits:
-  #   cpu: 2000m
-  #   memory: 4Gi
-  # requests:
-  #   cpu: 1000m
-  #   memory: 2500Mi
+# Sane defaults for a small IG set; raise for production/heavy IG loading.
+# No CPU limit by convention (avoids throttling); memory is always limited.
+resources:
+  requests:
+    cpu: 100m
+    memory: 1536Mi
+  limits:
+    memory: 2560Mi
 
 startupProbe:
   httpGet:

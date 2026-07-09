@@ -139,6 +139,82 @@
                 }
             }
         },
+        "jmxExporter": {
+            "type": "object",
+            "description": "Prometheus JMX exporter sidecar configuration",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable the JMX exporter sidecar"
+                },
+                "image": {
+                    "type": "object",
+                    "description": "JMX exporter image",
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "description": "Image repository"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Image tag"
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "enum": ["Always", "Never", "IfNotPresent"],
+                            "description": "Image pull policy"
+                        }
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535,
+                    "description": "HTTP port the exporter serves /metrics on"
+                },
+                "jmxPort": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535,
+                    "description": "JMX RMI port opened on the app JVM (loopback only)"
+                },
+                "resources": {
+                    "type": "object",
+                    "description": "Sidecar resource requests/limits"
+                },
+                "config": {
+                    "type": "object",
+                    "description": "jmx_exporter scrape config (rules/whitelist; hostPort is injected by the chart)",
+                    "additionalProperties": true
+                }
+            }
+        },
+        "serviceMonitor": {
+            "type": "object",
+            "description": "Prometheus Operator ServiceMonitor for the metrics port",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Create a ServiceMonitor"
+                },
+                "interval": {
+                    "type": "string",
+                    "description": "Scrape interval (e.g. 30s)"
+                },
+                "scrapeTimeout": {
+                    "type": "string",
+                    "description": "Scrape timeout (e.g. 10s)"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "Metrics path"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Extra labels on the ServiceMonitor"
+                }
+            }
+        },
         "ingress": {
             "type": "object",
             "description": "Ingress configuration. Set ingress.enabled=true and configure hosts/tls."
