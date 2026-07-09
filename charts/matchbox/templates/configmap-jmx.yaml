@@ -1,0 +1,15 @@
+{{- if .Values.jmxExporter.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "matchbox.fullname" . }}-jmx-exporter
+  labels:
+    {{- include "matchbox.labels" . | nindent 4 }}
+data:
+  # hostPort is owned by the chart (derived from jmxExporter.jmxPort) so the
+  # RMI port is defined in exactly one place; jmxExporter.config carries only
+  # the scrape rules/whitelist.
+  config.yaml: |
+    hostPort: localhost:{{ .Values.jmxExporter.jmxPort }}
+{{ toYaml .Values.jmxExporter.config | indent 4 }}
+{{- end }}

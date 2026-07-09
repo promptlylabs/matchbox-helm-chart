@@ -48,6 +48,20 @@ spec:
           env:
             - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "file:/config/application.yaml"
+            {{- if .Values.jmxExporter.enabled }}
+            # Open JMX RMI for the jmx-exporter sidecar to read over loopback.
+            # JDK_JAVA_OPTIONS is a separate channel the java launcher appends,
+            # so it doesn't clobber a caller-supplied JAVA_TOOL_OPTIONS.
+            - name: JDK_JAVA_OPTIONS
+              value: >-
+                -Dcom.sun.management.jmxremote
+                -Dcom.sun.management.jmxremote.port={{ .Values.jmxExporter.jmxPort }}
+                -Dcom.sun.management.jmxremote.rmi.port={{ .Values.jmxExporter.jmxPort }}
+                -Dcom.sun.management.jmxremote.local.only=true
+                -Dcom.sun.management.jmxremote.authenticate=false
+                -Dcom.sun.management.jmxremote.ssl=false
+                -Djava.rmi.server.hostname=127.0.0.1
+            {{- end }}
             {{- range .Values.env }}
             - name: {{ .name }}
               value: {{ .value | quote }}
@@ -71,10 +85,42 @@ spec:
             {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+        {{- if .Values.jmxExporter.enabled }}
+        # Prometheus JMX exporter — standalone mode, reads the app JVM over
+        # loopback RMI and serves /metrics. Runs in its own container so its
+        # footprint stays off the app JVM's heap.
+        - name: jmx-exporter
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          image: "{{ .Values.jmxExporter.image.repository }}:{{ .Values.jmxExporter.image.tag }}"
+          imagePullPolicy: {{ .Values.jmxExporter.image.pullPolicy }}
+          args:
+            - "{{ .Values.jmxExporter.port }}"
+            - "/etc/jmx-exporter/config.yaml"
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.jmxExporter.port }}
+              protocol: TCP
+          volumeMounts:
+            - name: jmx-exporter-config
+              mountPath: /etc/jmx-exporter
+          resources:
+            {{- toYaml .Values.jmxExporter.resources | nindent 12 }}
+        {{- end }}
       volumes:
         - name: config
           configMap:
             name: {{ include "matchbox.fullname" . }}-config
+        {{- if .Values.jmxExporter.enabled }}
+        - name: jmx-exporter-config
+          configMap:
+            name: {{ include "matchbox.fullname" . }}-jmx-exporter
+        {{- end }}
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

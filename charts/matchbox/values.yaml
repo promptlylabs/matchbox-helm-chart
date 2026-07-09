@@ -48,6 +48,34 @@ service:
   type: ClusterIP
   port: 8080
 
+# Prometheus JMX exporter sidecar (standalone mode over loopback RMI).
+# When enabled the chart also: opens JMX RMI on jmxPort (via JDK_JAVA_OPTIONS),
+# renders a config ConfigMap, and adds a "metrics" port to the Service.
+jmxExporter:
+  enabled: false
+  image:
+    # Docker Hardened Image (free Community tier), multi-arch, standalone mode.
+    repository: dhi.io/jmx-exporter
+    tag: "1"
+    pullPolicy: IfNotPresent
+  # HTTP port the exporter serves /metrics on.
+  port: 5556
+  # JMX RMI port opened on the app JVM for the sidecar to read (loopback only).
+  jmxPort: 9010
+  resources: {}
+  # jmx_exporter config — rules/whitelist ONLY. Do NOT set hostPort here;
+  # the chart injects it from jmxPort.
+  config: {}
+
+# ServiceMonitor for the metrics port (requires the prometheus-operator CRDs).
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  path: /metrics
+  # Extra labels (e.g. to match a Prometheus release selector).
+  labels: {}
+
 ingress: {}
 # Example ingress configuration:
 # enabled: true

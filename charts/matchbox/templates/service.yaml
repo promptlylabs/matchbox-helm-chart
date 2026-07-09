@@ -11,5 +11,11 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- if .Values.jmxExporter.enabled }}
+    - port: {{ .Values.jmxExporter.port }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+    {{- end }}
   selector:
     {{- include "matchbox.selectorLabels" . | nindent 4 }}
