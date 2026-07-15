@@ -11,5 +11,7 @@ data:
   # the scrape rules/whitelist.
   config.yaml: |
     hostPort: localhost:{{ .Values.jmxExporter.jmxPort }}
-{{ toYaml .Values.jmxExporter.config | indent 4 }}
+{{- with .Values.jmxExporter.config }}
+{{ toYaml . | indent 4 }}
+{{- end }}
 {{- end }}

@@ -79,8 +79,19 @@ jmxExporter:
     limits:
       memory: 256Mi
   # jmx_exporter config — rules/whitelist ONLY. Do NOT set hostPort here;
-  # the chart injects it from jmxPort.
-  config: {}
+  # the chart injects it from jmxPort. Default is bounded to the JVM mBeans
+  # matchbox actually exposes (java.lang + java.nio) to keep cardinality low.
+  # matchbox serves HTTP via Undertow, which registers no JMX mBeans, so there
+  # are no web-server beans to scrape here. Set config: {} to scrape ALL
+  # mBeans, or override includeObjectNames/rules with your own.
+  config:
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    includeObjectNames:
+      - "java.lang:*"
+      - "java.nio:*"
+    rules:
+      - pattern: ".*"
 
 # ServiceMonitor for the metrics port (requires the prometheus-operator CRDs).
 serviceMonitor:
