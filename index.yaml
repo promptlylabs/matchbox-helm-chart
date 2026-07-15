@@ -4,6 +4,60 @@ entries:
   - annotations:
       artifacthub.io/category: integration-delivery
       artifacthub.io/changes: |
+        - kind: fixed
+          description: JMX exporter sidecar no longer crashes when jmxExporter.config is empty; ship bounded default scrape config
+        - kind: added
+          description: Optional Prometheus JMX exporter sidecar and ServiceMonitor
+        - kind: changed
+          description: Bump matchbox appVersion to v4.1.11
+      artifacthub.io/images: |
+        - name: matchbox
+          image: europe-west6-docker.pkg.dev/ahdis-ch/ahdis/matchbox:v4.1.11
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Matchbox Website
+          url: https://matchbox.health
+        - name: Matchbox Documentation
+          url: https://ahdis.github.io/matchbox/
+        - name: Matchbox Source
+          url: https://github.com/ahdis/matchbox
+        - name: support
+          url: https://github.com/promptlylabs/matchbox-helm-chart/issues
+      artifacthub.io/signKey: |
+        fingerprint: 91BB0B66D1ACFC4F1334EFF88DBCB7A6A6A4969F
+        url: https://promptlylabs.github.io/matchbox-helm-chart/pubkey.asc
+    apiVersion: v2
+    appVersion: v4.1.11
+    created: "2026-07-15T10:45:08.817550133Z"
+    description: A Helm chart for deploying Matchbox - a FHIR server for validation
+      and mapping
+    digest: 6aac548ce48e0e70a0f7defd03700e47d709d89ae6a20bb74cef810a363a51b2
+    home: https://matchbox.health
+    icon: https://promptlylabs.github.io/matchbox-helm-chart/matchbox.png
+    keywords:
+    - fhir
+    - hl7
+    - healthcare
+    - interoperability
+    - validation
+    - mapping
+    - hapi
+    - matchbox
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - name: promptlylabs
+      url: https://github.com/promptlylabs
+    name: matchbox
+    sources:
+    - https://github.com/ahdis/matchbox
+    - https://github.com/promptlylabs/matchbox-helm-chart
+    type: application
+    urls:
+    - https://github.com/promptlylabs/matchbox-helm-chart/releases/download/matchbox-0.3.1/matchbox-0.3.1.tgz
+    version: 0.3.1
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/changes: |
         - kind: added
           description: Optional Prometheus JMX exporter sidecar and ServiceMonitor
         - kind: changed
@@ -153,4 +207,4 @@ entries:
     urls:
     - https://github.com/promptlylabs/matchbox-helm-chart/releases/download/matchbox-0.1.0/matchbox-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-09T15:42:21.323861658Z"
+generated: "2026-07-15T10:45:08.817561249Z"
