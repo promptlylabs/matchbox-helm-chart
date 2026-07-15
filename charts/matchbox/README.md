@@ -107,7 +107,7 @@ The following table lists the main configurable parameters of the Matchbox chart
 | `jmxExporter.port`  | HTTP port the exporter serves `/metrics` on                             | `5556`                                                |
 | `jmxExporter.jmxPort` | JMX RMI port opened on the app JVM (loopback only)                    | `9010`                                                |
 | `jmxExporter.resources` | Sidecar resource requests/limits                                    | `{}`                                                  |
-| `jmxExporter.config` | jmx_exporter scrape rules/whitelist (chart injects `hostPort`)         | `{}`                                                  |
+| `jmxExporter.config` | jmx_exporter scrape rules/whitelist (chart injects `hostPort`); set `{}` to scrape all mBeans | JVM `java.lang`/`java.nio` (see values.yaml) |
 | `serviceMonitor.enabled` | Create a Prometheus Operator ServiceMonitor for the metrics port   | `false`                                               |
 | `serviceMonitor.interval` | Scrape interval                                                   | `30s`                                                 |
 | `serviceMonitor.path` | Metrics path                                                          | `/metrics`                                            |
