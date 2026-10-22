@@ -144,6 +144,26 @@ The chart configures three types of health probes:
 - **Liveness Probe**: Ensures the application is running
 - **Readiness Probe**: Determines if the application is ready to serve traffic
 
+All three default to `httpGet` against the actuator endpoints. Setting exactly one of `exec`, `tcpSocket` or `grpc` (Kubernetes 1.24+) on a probe replaces its `httpGet`, so you don't need to null it out. For example, to gate startup on a script shipped in a ConfigMap:
+
+```yaml
+startupProbe:
+  exec:
+    command: ["sh", "/warmup/warmup.sh"]
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 120
+  failureThreshold: 60
+volumes:
+  - name: warmup
+    configMap:
+      name: matchbox-warmup
+volumeMounts:
+  - name: warmup
+    mountPath: /warmup
+    readOnly: true
+```
+
 
 ## Accessing Matchbox
 
