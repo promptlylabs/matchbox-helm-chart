@@ -51,6 +51,20 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Render a probe. The defaults in values.yaml use httpGet, and setting
+httpGet: null doesn't reliably remove a subchart default, so a probe that sets
+another handler (exec, tcpSocket, grpc) drops the default httpGet here:
+Kubernetes allows exactly one handler per probe.
+*/}}
+{{- define "matchbox.probe" -}}
+{{- if or .exec .tcpSocket .grpc }}
+{{- toYaml (omit . "httpGet") }}
+{{- else }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "matchbox.serviceAccountName" -}}

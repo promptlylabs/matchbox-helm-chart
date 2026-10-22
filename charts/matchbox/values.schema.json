@@ -4,12 +4,36 @@
     "description": "Configuration values for the Matchbox FHIR server Helm chart",
     "type": "object",
     "$defs": {
-        "httpProbe": {
+        "probe": {
             "type": "object",
-            "description": "Kubernetes HTTP probe configuration",
+            "description": "Kubernetes probe configuration. Setting exec, tcpSocket or grpc replaces the default httpGet handler",
             "properties": {
-                "httpGet": {
+                "exec": {
                     "type": "object",
+                    "description": "Run a command inside the container",
+                    "required": ["command"],
+                    "properties": {
+                        "command": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "tcpSocket": {
+                    "type": "object",
+                    "description": "Open a TCP connection to a container port",
+                    "required": ["port"]
+                },
+                "grpc": {
+                    "type": "object",
+                    "description": "Call the gRPC health checking protocol on a container port (Kubernetes 1.24+)",
+                    "required": ["port"]
+                },
+                "httpGet": {
+                    "type": ["object", "null"],
                     "properties": {
                         "path": {
                             "type": "string",
@@ -224,15 +248,15 @@
             "description": "CPU/memory resource requests and limits"
         },
         "startupProbe": {
-            "$ref": "#/$defs/httpProbe",
+            "$ref": "#/$defs/probe",
             "description": "Startup probe (allows time for IG loading on boot)"
         },
         "livenessProbe": {
-            "$ref": "#/$defs/httpProbe",
+            "$ref": "#/$defs/probe",
             "description": "Liveness probe"
         },
         "readinessProbe": {
-            "$ref": "#/$defs/httpProbe",
+            "$ref": "#/$defs/probe",
             "description": "Readiness probe"
         },
         "autoscaling": {
